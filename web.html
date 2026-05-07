@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dapur Kue Gambung Suli</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    html { scroll-behavior: smooth; height: 100%; }
+    body { font-family: 'Nunito', sans-serif; background-color: #FFF8F0; color: #3D3D3D; }
+    .font-display { font-family: 'Playfair Display', serif; }
+    
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-up { animation: fadeUp 0.6s ease forwards; }
+    
+    .cart-badge { position: absolute; top: -6px; right: -6px; background: #e87f6a; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+
+    #toast {
+      visibility: hidden; min-width: 280px; background-color: rgba(244, 168, 154, 0.95);
+      color: #fff; text-align: center; border-radius: 50px; padding: 14px 28px;
+      position: fixed; z-index: 100; left: 50%; bottom: 50%; transform: translate(-50%, 50%);
+      font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-size: 14px;
+    }
+    #toast.show { visibility: visible; animation: fadeInOut 2.5s ease-in-out; }
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translate(-50%, 70%); }
+      15% { opacity: 1; transform: translate(-50%, 50%); }
+      85% { opacity: 1; transform: translate(-50%, 50%); }
+      100% { opacity: 0; transform: translate(-50%, 30%); }
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+
+  <div id="toast">Berhasil dimasukkan ke keranjang</div>
+
+  <a href="https://wa.me/6281823490835768" target="_blank" class="fixed bottom-6 right-6 z-50 bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110">
+    <i data-lucide="message-circle" class="w-8 h-8"></i>
+  </a>
+
+  <header class="sticky top-0 z-40 bg-[#F5C542] shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+     <h1 class="font-display font-bold text-lg md:text-xl text-white flex items-center gap-3">
+      <img src="Logo.jpg" alt="Logo" class="w-8 h-8 object-cover rounded-full"> DKG Suli
+     </h1>
+     <div class="relative flex-1 max-w-md">
+      <input id="search-input" type="text" placeholder="Cari kue..." onkeyup="searchProduct()" class="w-full pl-10 pr-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#F4A89A]">
+      <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+     </div>
+     <button onclick="toggleCart()" class="relative p-2 text-white">
+      <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+      <span id="cart-count" class="cart-badge hidden">0</span>
+     </button>
+    </div>
+  </header>
+
+  <section class="relative bg-gradient-to-br from-[#FFE8D6] via-[#FFF8F0] to-[#FFE8D6] py-24 px-4 text-center">
+    <div class="max-w-5xl mx-auto">
+      <p class="text-[#F4A89A] font-semibold uppercase tracking-widest text-sm animate-fade-up">Authentic Taste of Luwu</p>
+      <h2 class="font-display text-5xl md:text-7xl font-bold mt-4 animate-fade-up">Dapur Kue Gambung Suli</h2>
+      <p class="mt-6 text-charcoal/70 max-w-2xl mx-auto animate-fade-up">Kue Tradisional Luwu — Dibuat dengan cinta dan resep turun-temurun.</p>
+      <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4 animate-fade-up">
+        <a href="#katalog" class="bg-[#F4A89A] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition">Lihat Produk</a>
+        <a href="#history" class="border-2 border-[#F4A89A] text-[#F4A89A] px-10 py-4 rounded-full font-bold hover:bg-[#F4A89A] hover:text-white transition">Tentang Kami</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="history" class="py-20 px-4 bg-white">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <h3 class="font-display text-4xl font-bold">Perjalanan Kami</h3>
+        <div class="w-24 h-1 bg-[#F4A89A] mx-auto mt-4"></div>
+      </div>
+
+      <div class="mb-20">
+        <div class="flex items-center gap-2 mb-8">
+          <span class="bg-[#FFE8D6] text-[#F4A89A] px-4 py-1 rounded-full font-bold text-sm">FASE 1</span>
+          <h4 class="text-2xl font-display font-bold text-[#F4A89A]">Awal Mula & Perjuangan</h4>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="space-y-3">
+            <img src="Awal jualan.jpg" class="rounded-2xl w-full h-64 object-cover shadow-md">
+            <p class="text-sm leading-relaxed text-gray-600">Semua berawal dari langkah kecil. Dulu, kami memulai perjalanan ini dengan sangat sederhana, menjajakan kue di pinggir jalan untuk memperkenalkan rasa khas Suli.</p>
+          </div>
+          <div class="space-y-3">
+            <img src="Toko pertama.jpg" class="rounded-2xl w-full h-64 object-cover shadow-md">
+            <p class="text-sm leading-relaxed text-gray-600">Dengan keberanian dan mimpi besar, kami membuka toko pertama. Saat itu, variasi produk kami masih terbatas, namun semangat kami tidak pernah surut.</p>
+          </div>
+          <div class="space-y-3">
+            <img src="Suasana-toko.jpg" class="rounded-2xl w-full h-64 object-cover shadow-md">
+            <p class="text-sm leading-relaxed text-gray-600">Momen yang selalu kami syukuri adalah ketika toko kecil kami mulai dipadati pembeli. Kepercayaan Anda di masa awal itulah yang menguatkan kami.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-2 mb-8">
+          <span class="bg-[#F5C542]/20 text-[#D4A830] px-4 py-1 rounded-full font-bold text-sm">FASE 2</span>
+          <h4 class="text-2xl font-display font-bold text-[#D4A830]">Perkembangan & Masa Depan</h4>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="space-y-3">
+            <div class="flex gap-2">
+              <img src="Adonan Bagea.jpg" class="rounded-xl w-1/2 h-40 object-cover">
+              <img src="Bagea proses.jpg" class="rounded-xl w-1/2 h-40 object-cover">
+            </div>
+            <p class="text-sm leading-relaxed text-gray-600">Kini kami telah mampu memproduksi kue dalam jumlah besar dengan tetap menjaga standar rasa tradisional yang otentik.</p>
+          </div>
+          <div class="space-y-3">
+            <img src="Produk.jpg" class="rounded-xl w-full h-40 object-cover shadow-md">
+            <p class="text-sm leading-relaxed text-gray-600">Dedikasi kami melahirkan produk unggulan yang kini telah diakui dan disukai oleh masyarakat luas.</p>
+          </div>
+          <div class="space-y-3">
+            <img src="Toko terbaru.jpg" class="rounded-xl w-full h-40 object-cover shadow-md border-2 border-[#F5C542]">
+            <p class="text-sm leading-relaxed text-gray-600">Tahun 2026 menjadi tonggak baru. DKG Suli kini tumbuh menjadi pusat oleh-oleh utama di Luwu bagi wisatawan.</p>
+          </div>
+          <div class="space-y-3">
+            <div class="flex gap-2">
+              <img src="Belanja.jpg" class="rounded-xl w-1/2 h-40 object-cover">
+              <img src="rombongan .jpg" class="rounded-xl w-1/2 h-40 object-cover">
+            </div>
+            <p class="text-sm leading-relaxed text-gray-600 italic">Terima kasih kepada pelanggan setia yang selalu menyaksikan setiap langkah perkembangan toko kami.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="katalog" class="py-20 px-4 bg-[#FFF8F0]">
+    <div class="max-w-6xl mx-auto text-center">
+      <h3 class="font-display text-4xl font-bold mb-12">Produk Kami</h3>
+      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-left"></div>
+    </div>
+  </section>
+
+  <section class="py-16 px-4 bg-white">
+    <div class="container mx-auto max-w-6xl">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold font-display">Galeri & Lokasi</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="group">
+                <div class="aspect-square rounded-2xl overflow-hidden border shadow-sm mb-3">
+                    <img src="Isi kue durian.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <p class="text-xs text-gray-600">Bahan premium dengan <strong>durian asli</strong> untuk rasa otentik.</p>
+            </div>
+            <div class="group">
+                <div class="aspect-square rounded-2xl overflow-hidden border shadow-sm mb-3">
+                    <img src="Proses Kue.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <p class="text-xs text-gray-600">Proses pembuatan yang sangat <strong>higienis</strong>.</p>
+            </div>
+            <div class="group">
+                <div class="aspect-square rounded-2xl overflow-hidden border shadow-sm mb-3">
+                    <img src="Toko.png" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <p class="text-xs text-gray-600">Lokasi strategis di <strong>Depan Pasar Lama Suli</strong>.</p>
+            </div>
+            <div class="group">
+                <div class="aspect-square rounded-2xl overflow-hidden border shadow-sm mb-3">
+                    <img src="Pengunjung.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <p class="text-xs text-gray-600">Destinasi oleh-oleh utama bagi para <strong>wisatawan</strong>.</p>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <div id="cart-overlay" class="hidden fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/40" onclick="toggleCart()"></div>
+    <div class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl p-6 overflow-auto flex flex-col">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-display text-2xl font-bold">Keranjang Belanja</h3>
+        <button onclick="toggleCart()"><i data-lucide="x"></i></button>
+      </div>
+      
+      <div id="cart-items" class="space-y-4 flex-grow"></div>
+      
+      <div id="cart-summary" class="hidden mt-6 border-t pt-4">
+        <div class="space-y-1 text-sm mb-4">
+            <div class="flex justify-between"><span>Total Berat:</span><span class="font-bold"><span id="cart-weight">0</span> kg</span></div>
+            <div class="flex justify-between text-lg text-[#F4A89A]"><span>Total Harga:</span><span class="font-bold">Rp <span id="cart-total">0</span></span></div>
+        </div>
+        
+        <div class="space-y-3">
+          <input id="checkout-name" type="text" placeholder="Nama Lengkap" class="w-full border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#F4A89A] outline-none">
+          <input id="checkout-addr" type="text" placeholder="Alamat Lengkap" class="w-full border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#F4A89A] outline-none">
+          <input id="checkout-wa" type="tel" placeholder="Nomor WhatsApp" class="w-full border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#F4A89A] outline-none">
+          <button onclick="submitOrder()" class="w-full bg-[#F4A89A] text-white py-3 rounded-full font-bold hover:bg-[#e87f6a] transition">Pesan via WhatsApp</button>
+        </div>
+      </div>
+      
+      <div id="cart-empty" class="text-center py-12 opacity-30">
+        <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto"></i>
+        <p class="mt-2">Keranjang masih kosong</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-[#F5C542] text-white py-12 text-center">
+    <p class="font-display text-2xl font-bold uppercase tracking-widest">Dapur Kue Gambung Suli</p>
+    <p class="mt-2 text-sm opacity-80">© 2026 DKG Suli - Luwu, Sulawesi Selatan</p>
+  </footer>
+
+  <script>
+    const products = [
+      { id: 1, name: "Kue Gambung Durian", desc: "Isian durian asli yang lumer di mulut", price: 35000, weight: 0.5, image: "Gambung.jpg" },
+      { id: 2, name: "Bolu Cukke", desc: "Manis asli gula merah tradisional", price: 10000, weight: 0.4, image: "Bolcuk.jpg" },
+      { id: 3, name: "Bagea Sagu", desc: "Kue renyah khas Luwu dari sagu pilihan", price: 40000, weight: 0.35, image: "Bagea.jpg" },
+      { id: 4, name: "Keripik Pisang", desc: "Pisang tanduk pilihan yang renyah", price: 30000, weight: 0.3, image: "Keripik Pisang.jpg" },
+      { id: 5, name: "Dodol Kampung", desc: "Legit dan manis gula merah asli", price: 20000, weight: 0.4, image: "Dodol.jpg" },
+      { id: 6, name: "Kue Kurma", desc: "Manis gurih dengan balutan wijen", price: 25000, weight: 0.3, image: "Kurma.jpg" },
+      { id: 7, name: "Kue Tori", desc: "Kue tradisional dengan tekstur unik", price: 15000, weight: 0.3, image: "Tori.jpg" }
+    ];
+
+    let cart = [];
+
+    function renderProducts(filter = '') {
+      const grid = document.getElementById('product-grid');
+      const filtered = products.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()));
+      
+      grid.innerHTML = filtered.map(p => `
+        <div class="bg-white rounded-2xl shadow-sm p-5 flex flex-col hover:shadow-md transition">
+          <div class="h-44 bg-gray-50 rounded-xl overflow-hidden mb-4">
+            <img src="${p.image}" class="w-full h-full object-cover">
+          </div>
+          <h4 class="font-bold text-lg">${p.name}</h4>
+          <p class="text-sm text-gray-500 flex-1 mt-1">${p.desc}</p>
+          <div class="mt-4 flex items-center justify-between">
+            <div>
+              <p class="font-bold text-[#F4A89A]">Rp ${p.price.toLocaleString('id')}</p>
+              <p class="text-[10px] opacity-50">${p.weight} kg</p>
+            </div>
+            <button onclick="addToCart(${p.id})" class="bg-[#F4A89A] text-white px-4 py-2 rounded-full text-xs font-bold hover:scale-105 transition">
+              + Keranjang
+            </button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function searchProduct() {
+      const val = document.getElementById('search-input').value;
+      renderProducts(val);
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const existing = cart.find(c => c.id === id);
+      if (existing) { existing.qty++; } else { cart.push({ ...product, qty: 1 }); }
+      
+      const toast = document.getElementById("toast");
+      toast.textContent = product.name + " ditambah!";
+      toast.classList.add("show");
+      setTimeout(() => { toast.classList.remove("show"); }, 2500);
+      
+      updateCartUI();
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(c => c.id !== id);
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const count = cart.reduce((s, c) => s + c.qty, 0);
+      document.getElementById('cart-count').textContent = count;
+      document.getElementById('cart-count').classList.toggle('hidden', count === 0);
+
+      const itemsEl = document.getElementById('cart-items');
+      const emptyEl = document.getElementById('cart-empty');
+      const summaryEl = document.getElementById('cart-summary');
+
+      if (cart.length === 0) {
+        itemsEl.innerHTML = '';
+        emptyEl.classList.remove('hidden');
+        summaryEl.classList.add('hidden');
+      } else {
+        emptyEl.classList.add('hidden');
+        summaryEl.classList.remove('hidden');
+        itemsEl.innerHTML = cart.map(c => `
+          <div class="flex items-center justify-between p-3 bg-[#FFF8F0] rounded-xl border border-orange-50">
+            <div class="flex-1">
+              <p class="font-bold text-sm">${c.name}</p>
+              <p class="text-xs text-gray-500">Rp ${c.price.toLocaleString('id')} x ${c.qty}</p>
+            </div>
+            <button onclick="removeFromCart(${c.id})" class="text-red-400 p-2"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+          </div>
+        `).join('');
+        
+        const totalWeight = cart.reduce((s, c) => s + (c.weight * c.qty), 0).toFixed(2);
+        const totalPrice = cart.reduce((s, c) => s + (c.price * c.qty), 0).toLocaleString('id');
+        
+        document.getElementById('cart-weight').textContent = totalWeight;
+        document.getElementById('cart-total').textContent = totalPrice;
+      }
+      lucide.createIcons();
+    }
+
+    function toggleCart() { document.getElementById('cart-overlay').classList.toggle('hidden'); }
+
+    function submitOrder() {
+      const name = document.getElementById('checkout-name').value;
+      const addr = document.getElementById('checkout-addr').value;
+      const wa = document.getElementById('checkout-wa').value;
+      
+      if (!name || !wa || !addr) return alert("Mohon lengkapi Nama, Alamat, dan No WA!");
+      
+      const totalP = cart.reduce((s, c) => s + (c.price * c.qty), 0).toLocaleString('id');
+      const totalW = cart.reduce((s, c) => s + (c.weight * c.qty), 0).toFixed(2);
+      
+      let text = `Halo DKG Suli, saya mau pesan:\n\n`;
+      cart.forEach(c => { text += `- ${c.name} (${c.qty}x)\n`; });
+      text += `\nTotal Harga: Rp ${totalP}\nTotal Berat: ${totalW} kg\n\nData Pengirim:\nNama: ${name}\nAlamat: ${addr}\nNo WA: ${wa}`;
+      
+      window.open(`https://wa.me/6281823490835768?text=${encodeURIComponent(text)}`);
+      cart = []; updateCartUI(); toggleCart();
+    }
+
+    renderProducts();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
